@@ -7,7 +7,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    // statusLogin: false,
+    watchedTags: [],
+    autocompleteItems: [{text: 'javascript',}, {text: 'nodejs',}],
+
     checkLogin: false,
     listQuestions: [
       { userId: { name: '' } }
@@ -25,6 +27,14 @@ export default new Vuex.Store({
       state.checkLogin = status
     },
 
+    getDataUserMutate(state, watchedTags){
+      state.watchedTags = watchedTags
+    },
+
+    getTagsMutate(state, tags){
+      state.autocompleteItems = tags
+    },
+
     getAllQuestionMutate(state, questions){
       state.listQuestions = questions
     },
@@ -34,7 +44,6 @@ export default new Vuex.Store({
     },
 
     postQuestionMutate(state, question){
-      console.log('question baru =',question)
       state.listQuestions.unshift(question)
     },
 
@@ -65,6 +74,44 @@ export default new Vuex.Store({
   },
 //===============================================================================
   actions: {
+    getDataUser({commit}){
+      api({
+        url: '/users',
+        headers: {
+          token: localStorage.token
+        }
+      })
+        .then( ({data}) => {
+          commit('getDataUserMutate', data.user.watchedTags)
+        })
+        .catch( error => {
+          commit('showErrorMessage', error.response.data.message)
+          setTimeout(() => {
+            commit('deleteMessage')
+          }, 2500);
+        })
+    },
+
+    addWatchedTags({commit}, watchtag){
+      api({
+        url: '/users',
+        method: 'PUT',
+        data: { watchedTags: watchtag},
+        headers: {
+          token: localStorage.token
+        }
+      })
+        .then( ({data}) => {
+          this.dispatch('getDataUser')
+        })
+        .catch( error => {
+          commit('showErrorMessage', error.response.data.message)
+          setTimeout(() => {
+            commit('deleteMessage')
+          }, 2500);
+        })
+    },
+
     search({commit}, data){
       let url = `questions?`
 
@@ -182,6 +229,8 @@ export default new Vuex.Store({
 
     editQuestion({commit}, data){
       console.log('edit question')
+      data.question.tags = data.question.tags.map( e => e.text)
+
       api
         .put(`/questions/${data.questionId}`, data.question, {
           headers: {
@@ -326,6 +375,22 @@ export default new Vuex.Store({
         })
         .then( vote => {
           this.dispatch('getAnswer', data.questionId)
+        })
+        .catch( error => {
+          commit('showErrorMessage', error.response.data.message)
+          setTimeout(() => {
+            commit('deleteMessage')
+          }, 2500);
+        })
+    },
+
+    getTags({commit}){
+      api({
+        url: '/tags'
+      })
+        .then( ({data}) => {
+          // this.autocompleteItems = data.tags
+          commit('getTagsMutate', data.tags)
         })
         .catch( error => {
           commit('showErrorMessage', error.response.data.message)

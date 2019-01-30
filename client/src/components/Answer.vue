@@ -57,6 +57,7 @@ export default {
     postAnswer(){
       let questionId = this.$route.params.questionId
       this.$store.dispatch('postAnswer', {content: this.content, questionId})
+      this.content = ''
     },
     vote(status,answerId){
       let questionId = this.$route.params.questionId

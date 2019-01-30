@@ -9,7 +9,7 @@
       <b-form @submit.prevent="add">
         <input type="text" name="" id="" v-model="watchtag" style="width: 8vw;">
       </b-form>
-      <a @click.prevent="search(tag)" href="" class="mr-2" v-for="tag in listWatchedTags" :key="tag.id">
+      <a @click.prevent="search(tag)" href="" class="mr-2" v-for="tag in watchedTags" :key="tag.id">
         <small >{{tag}}</small>
       </a>
     </b-card>
@@ -18,18 +18,21 @@
 
 <script>
 import api from '@/api/api.js'
+import { mapState } from 'vuex';
 
 export default {
   name: "sidebar",
   data(){
     return {
       watchtag: '',
-      listWatchedTags: []
+      // listWatchedTags: []
     }
   },
+  computed: mapState([
+    'watchedTags'
+  ]),
   methods: {
     search(tag){
-      // console.log("ADDDD",tag)
       this.$store.dispatch('search',{title: tag})
     },
     gohome(){
@@ -37,38 +40,10 @@ export default {
       this.$router.push('/')
     },
     add(){
-      console.log('add tag = ', this.watchtag)
-      api({
-        url: '/users',
-        method: 'PUT',
-        data: { watchedTags: this.watchtag},
-        headers: {
-          token: localStorage.token
-        }
-      })
-        .then( ({data}) => {
-          this.watchtag = ''
-          this.getDataUser()
-        })
-        .catch( error => {
-          console.log(error.response.data)
-        })
+      this.$store.dispatch('addWatchedTags', this.watchtag)
     },
     getDataUser(){
-      console.log('get data user')
-      api({
-        url: '/users',
-        headers: {
-          token: localStorage.token
-        }
-      })
-        .then( ({data}) => {
-          console.log(data)
-          this.listWatchedTags = data.user.watchedTags
-        })
-        .catch( error => {
-          console.log(error.response.data)
-        })
+      this.$store.dispatch('getDataUser')
     }
   },
   created(){

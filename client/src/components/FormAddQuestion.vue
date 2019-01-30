@@ -45,14 +45,12 @@ export default {
       statusTag: null,
 
       tag: '',
-      autocompleteItems: [{
-        text: 'javascript',
-      }, {
-        text: 'nodejs',
-      }],
     };
   },
   computed: {
+    autocompleteItems(){
+      return this.$store.state.autocompleteItems
+    },
     filteredItems(){
       return this.autocompleteItems.filter(i => {
         return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1
@@ -64,12 +62,12 @@ export default {
   },
   watch: {
     tag(val){
-      let data = this.autocompleteItems.filter(i => {
-        return i.text.toLowerCase().indexOf(val.toLowerCase()) !== -1
-      })
+      // let data = autocompleteItems.filter(i => {
+      //   return i.text.toLowerCase().indexOf(val.toLowerCase()) !== -1
+      // })
     }
   },
-  mounted() {
+  created() {
     this.checkStatusLogin()
     this.getTags()
   },
@@ -82,6 +80,7 @@ export default {
     postQuestion() {
       if (this.checkLogin) {
         this.$store.dispatch('postQuestion', this.question)
+        // this.$store.dispatch('getAllQuestions')
         this.createTag()
         this.$router.push('/')
       } else {
@@ -89,31 +88,25 @@ export default {
       }
     },
     getTags(){
-      api({
-        url: '/tags'
-      })
-        .then( ({data}) => {
-          this.autocompleteItems = data.tags
-        })
-        .catch( error => {
-          console.log(error.response.data)
-        })
+      this.$store.dispatch('getTags')
     },
     createTag(){ 
       this.question.tags.forEach(e => {
-        api({
-          url: '/tags',
-          method: "post",
-          data: {text: e.text}
-        })
-          .then( ({data}) => {
-            this.getTags()
+        let a = this.autocompleteItems.filter( item => item.text === e)
+        if(a.length === 0){
+          api({
+            url: '/tags',
+            method: "post",
+            data: {text: e}
           })
-          .catch( error => {
-            console.log(error.response.data)
-          })
-      });
-      
+            .then( ({data}) => {
+              this.getTags()
+            })
+            .catch( error => {
+              console.log(error.response.data)
+            })
+        }
+      }); 
     }
   }
 };

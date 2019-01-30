@@ -75,7 +75,6 @@ class userController{
     
     User.findOne({email})
     .then( user => {
-      console.log('user', user)
       if(user){
         if(checkPassword(password, user.password)){
           let token = jwt.sign({ email }, process.env.SECRET);
@@ -93,7 +92,6 @@ class userController{
   }
 
   static getDataUser(req,res){
-    console.log('masuk gannn')
     User.findById(req.current_user._id)
       .then( user => {
         res.status(200).json({user})

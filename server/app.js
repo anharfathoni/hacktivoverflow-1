@@ -13,7 +13,25 @@ var answerRouter = require('./routes/answer.js')
 var tagRouter = require('./routes/tag')
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/Zenfox-hacktivoverflow');
+mongoose.connect('mongodb://localhost/Zenfox-test');
+
+//---------------------------------CONNECT MLAB DATABASE---------------------------------------
+// const mongodbUri = 'mongodb://anharaf:anharaf1234@ds055690.mlab.com:55690/zenfox-hacktivoverflow'
+
+// mongoose.connect(mongodbUri,
+//   {
+//     useNewUrlParser: true,
+//     auth: {
+//       user: 'anharaf',
+//       password: 'anharaf1234'
+//     }
+//   });
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function() {
+//   console.log(('You are Mongected'));
+// });
+//------------------------------------------------------------------------------
 
 var app = express();
 // view engine setup

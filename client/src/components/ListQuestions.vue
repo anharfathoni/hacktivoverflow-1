@@ -64,7 +64,7 @@
       <div class="col-3">
         <div class="row">
           <img src="../../public/H-logo2.png" alt="avatar" height="30">
-          <small>{{question.userId.name}}</small>
+          <small>{{username(question)}}</small>
         </div>
         <div class="row">
           <small>
@@ -88,6 +88,13 @@ export default {
     return {};
   },
   methods: {
+    username(question){
+      if(question.userId){
+        return question.userId.name
+      } else {
+        return null
+      }
+    },
     totalVote(question){
       if(question.voteUp){
         return (question.voteUp.length - question.voteDown.length)
@@ -109,7 +116,7 @@ export default {
       this.$store.dispatch('search', {sort})
     },
     sortingVote(){
-      this.listQuestions.sort(function(a, b){ return (a.voteUp.length-a.voteDown.length) - (b.voteUp.length - b.voteDown.length) })
+      this.listQuestions.sort(function(a, b){ return (b.voteUp.length - b.voteDown.length) - (a.voteUp.length-a.voteDown.length) })
     },
     sortingAnswer(){
       this.listQuestions.sort(function(a, b){ return (a.answerId.length) - (b.answerId.length) })
