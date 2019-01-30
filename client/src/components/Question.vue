@@ -2,11 +2,14 @@
   <div class="container details">
     <div class="row">
       <h4>{{question.title}}</h4>
-      <div v-if="checkOwner">
+      <div v-if="checkOwner" class="ml-3">
         <router-link :to="`/questions/edit/${question._id}`">
-          <b-button variant="link">Edit</b-button>
+          <small>Edit</small>
         </router-link>
-        <b-button variant="link" @click.prevent="deleteQuestion">Delete</b-button>
+        <a href="">
+          <small class="ml-3" @click.prevent="deleteQuestion">Delete</small>
+        </a>
+        
       </div>
     </div>
     <hr>
@@ -17,9 +20,18 @@
         <a href="#" @click.prevent="vote('down')"><i class="fas fa-sort-down fa-3x"></i></a>
       </div>
       <div class="col-10">
-        <p>Detail Question:</p>
+        <p><u> Detail Question:</u></p>
         <p v-html="question.body"></p>
-        <small>Posted on {{String(question.updatedAt).slice(0,10)}} by {{question.userId.name}}</small>
+        <div class="row">
+          <small>
+            <small>Posted on {{moment(question.createdAt).calendar()}} by <b>{{question.userId.name}}</b></small>
+          </small>
+        </div>
+        <div class="row">
+          <small>
+            <small>Updated on {{moment(question.updatedAt).calendar()}}</small>
+          </small>
+        </div>
       </div>
     </div>
   </div>

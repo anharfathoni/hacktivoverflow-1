@@ -10,16 +10,22 @@
         <div class="col-10">
           <b><p v-html="answer.content"></p></b>
           <div class="row">
-            <small>Posted on {{answer.createdAt}} by {{answer.userId.name}}</small>
+            <small>
+              <small>Posted on {{moment(answer.createdAt).calendar()}} by <b>{{answer.userId.name}}</b></small>
+            </small>
           </div>
           <div class="row">
-            <small>Updated on {{answer.updatedAt}}</small>
+            <small>
+              <small>Updated on {{moment(answer.updatedAt).calendar()}}</small>
+            </small>
           </div>
         </div>
         <div class="col-2">
-          <router-link :to="`/answer/edit/${answer.questionId}/${answer._id}`">
-            <b-button variant="link">Edit</b-button>
-          </router-link>
+          <div v-if="checkOwner(answer)">
+            <router-link :to="`/answers/edit/${answer.questionId}/${answer._id}`">
+              <small>Edit</small>
+            </router-link>
+          </div>
         </div>
       </div>
       <hr>
@@ -62,9 +68,15 @@ export default {
       } else {
         return 0
       }
+    },
+    checkOwner(answer){
+      if(localStorage.userId === answer.userId._id){
+        return true
+      } else {
+        return false
+      }
     }
-  },
-  
+  }
 };
 </script>
 

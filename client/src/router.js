@@ -11,17 +11,18 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import(/* webpackChunkName: "question" */ './views/Form.vue'),
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import(/* webpackChunkName: "question" */ './views/Form.vue'),
+      component: Home,
+      children: [{
+        path: 'login',
+        name: 'login',
+        component: () => import(/* webpackChunkName: "question" */ './components/FormSign.vue'),
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import(/* webpackChunkName: "question" */ './components/FormSign.vue'),
+      }
+      ]
     },
     {
       path: '/about',
@@ -47,6 +48,16 @@ export default new Router({
           component: () => import('./components/DetailQuestion.vue')
         }
       ]
+    },
+    {
+      path: '/answers',
+      name: 'answer',
+      component: () => import('./views/Answer.vue'),
+      children: [{
+        path: 'edit/:questionId/:answerId',
+        name: 'editanswer',
+        component: () => import('./components/EditAnswer.vue')
+      }]
     }
   ]
 })

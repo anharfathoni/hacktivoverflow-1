@@ -29,7 +29,7 @@ export default {
   computed: mapState([
     'detailQuestion', 'answers'
   ]),
-  mounted(){
+  created(){
     this.$store.dispatch('getDetailsQuestion', this.$route.params.questionId)
     this.$store.dispatch('getAnswer', this.$route.params.questionId)
   },

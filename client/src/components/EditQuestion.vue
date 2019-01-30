@@ -20,9 +20,13 @@
 <script>
 import api from "@/api/api.js";
 import {mapState} from 'vuex'
+import VueTagsInput from '@johmun/vue-tags-input'
 
 export default {
   name: "askquestion",
+  components: {
+    VueTagsInput
+  },
   data() {
     return {
       isLogin: false,

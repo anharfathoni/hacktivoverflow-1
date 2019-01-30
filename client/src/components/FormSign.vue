@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-5 mt-5">
         <img src="../../public/H-logo2.png" alt="Logo HacktivOverflow">
-        <p>Create your Stack Overflow account.</p>
+        <p>Create your Hacktiv Overflow account.</p>
         <p>It's free and only takes a minute.</p>
       </div>
       <div class="col-7">
@@ -16,14 +16,7 @@
           <input v-model="password" type="password" id="inputPassword" class="form-control" placeholder="Password">
           <button v-if="!formLogin" class="btn btn-lg btn-primary btn-block" @click.prevent='register'>Register</button><br>
           <button v-if="formLogin" class="btn btn-lg btn-primary btn-block" @click.prevent='login'>Login</button><br>
-          <p>Continue with </p>
-          <g-signin-button
-            :params="googleSignInParams"
-            @success="onSignInSuccess"
-            @error="onSignInError">
-            Sign in with Google
-          </g-signin-button>
-          <br><br>
+          <br>
           <div v-if="!formLogin" class="register">
             <router-link to="/login">
               <p>Have an Account? <button>Login here</button></p>
@@ -42,6 +35,7 @@
 
 <script>
 import api from '@/api/api.js'
+import {mapState} from 'vuex'
 
 export default {
   name:'login-register-form',
@@ -50,43 +44,18 @@ export default {
       name: '',
       email: '',
       password: '',
-      formLogin: false, //login or register
-      googleSignInParams: {
-        client_id: '828992207061-gs9c21tstsirf52de5io3i6bopr6ijls.apps.googleusercontent.com'
-      }
+      formLogin: false, //login or register,
+      status: false
     }
   },
+  computed: mapState([
+    'checkLogin'
+  ]),
   methods: {
-    onSignInSuccess (googleUser) {
-      console.log('signed in')
-      const profile = googleUser.getBasicProfile()
-      var id_token = googleUser.getAuthResponse().id_token;
-      api
-          .post('/users/fblogin', {token: id_token} )
-          .then( user => {
-            console.log(user)
-            this.success = true
-            this.successMsg = user.data.message
-            localStorage.setItem('token',user.data.token)
-            localStorage.setItem('userId', user.data.user._id)
-            setTimeout(() => {
-              this.clearMessage()
-              this.clearForm()
-              this.isLogin = true
-            }, 2000);
-          })
-          .catch( error => {
-            console.log(error)
-            this.error = true
-            this.errorMsg = error.response.data.message
-            setTimeout(() => {
-              this.clearMessage()
-              // this.clearForm()
-            }, 3000);
-          })
-    },
-    onSignInError (error) {
-      console.log('OH NOES', error)
+    checkStatusLogin(){
+      if(this.checkLogin){
+        this.$router.push('/')
+      }
     },
     login(){
       let user = {
@@ -98,24 +67,26 @@ export default {
         method: "POST",
         data: user
       })
-        .then( user => {
-          console.log(user)
-          let token = user.data.token
-          localStorage.setItem('token', token)
-          localStorage.setItem('role', user.data.role)
+        .then( ({data}) => {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('userId', data.userId)
           swal({
-            title: user.data.message,
+            title: data.message,
             icon: "success",
             timer: 2000
           });
-          this.$emit('login')
-          this.$router.push('/')
+          this.name = '',
+          this.email = '',
+          this.password = ''
+          this.$store.dispatch('login')
+          this.checkStatusLogin()
         })
         .catch( error => {
           swal({
             title: error.response.data.message,
             icon: "error",
           });
+          this.checkStatusLogin()
         })
     },
     register(){
@@ -141,7 +112,6 @@ export default {
           });
         })
         .catch( error => {
-          console.log(error.response.data)
           swal({
             title: error.response.data.message,
             icon: "error",
@@ -150,26 +120,25 @@ export default {
         })
     },
     checkStatusForm(){
-      console.log("state:", this.$route.params.state)
-      let routes = this.$route.params.state
-      if(routes === 'login'){
-        console.log('lagi login nih')
+      let routes = this.$route.path
+      if(routes === '/login'){
         this.formLogin = true
-      } else if(routes === 'register'){
-        console.log('lagi register nih')
+      } else if(routes === '/register'){
         this.formLogin = false
       }
     }
   },
   watch: {
     $route(){
-      console.log('cek route lagi dong')
-      // console.log(this.$route)
+      this.$store.dispatch('checkLogin')
       this.checkStatusForm()
+      this.checkStatusLogin()
     }
   },
   created(){
+    this.$store.dispatch('checkLogin')
     this.checkStatusForm()
+    this.checkStatusLogin()
   }
 
 }

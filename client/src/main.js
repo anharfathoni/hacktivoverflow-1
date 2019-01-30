@@ -9,14 +9,8 @@ import wysiwyg from "vue-wysiwyg";
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-// var moment = require('moment');
-// moment().startOf('day').fromNow(); 
-
-// import moment from 'moment'
-// import 'moment/locale/es'  // without this line it didn't work
-// moment.locale('es')
-
 import moment from 'moment'
+import swal from 'sweetalert'
 
 Vue.prototype.moment = moment
 

@@ -24,11 +24,11 @@ const questionSchema = new Schema({
   }],
   createdAt: {
     type: Date,
-    default: String(new Date())
+    default: new Date()
   },
   updatedAt: {
     type: Date,
-    default: String(new Date())
+    default: new Date()
   },
   tags: Array,
   answerId: [{

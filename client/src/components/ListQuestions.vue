@@ -58,18 +58,16 @@
           </router-link>
         </div>
         <div class="row">
-          <b-badge variant="primary" class="mr-1">Tag1</b-badge>
-          <b-badge variant="primary" class="mr-1">Tag2</b-badge>
-          <b-badge variant="primary" class="mr-1">Tag3</b-badge>
+          <b-badge @click.prevent="search(tag)" variant="primary" class="mr-1" v-for="tag in question.tags" :key="tag.id">{{tag}}</b-badge>
         </div>
       </div>
       <div class="col-3">
         <div class="row">
-          <small>Asked {{moment(question.createdAt).fromNow()}}</small>
+          <img src="../../public/H-logo2.png" alt="avatar" height="30">
+          <small>{{question.userId.name}}</small>
         </div>
         <div class="row">
-          <img src="../../public/H-logo2.png" alt="avatar" height="40">
-          <small>{{question.userId.name}}</small>
+          <small>Asked {{moment(question.createdAt).calendar()}}</small>
         </div>
       </div>
     </div>
@@ -98,6 +96,9 @@ export default {
       } else {
         return 0
       }
+    },
+    search(title){
+      this.$store.dispatch('search', {title})
     }
   },
   computed: mapState(["listQuestions"])

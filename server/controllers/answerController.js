@@ -23,11 +23,9 @@ class answerController{
     Answer.findOne({_id: answerId, questionId: questionId})
     .populate('userId')
     .exec( function(err, answer){
-      console.log({err,answer})
       if(err){
         res.status(400).json({error, message: error.message})
       } else {
-        console.log(answer)
         res.status(200).json({answer}) 
       }
     })

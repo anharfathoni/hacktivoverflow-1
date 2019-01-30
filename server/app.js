@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var questionRouter = require('./routes/question.js')
 var answerRouter = require('./routes/answer.js')
+var tagRouter = require('./routes/tag')
 
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/Zenfox-hacktivoverflow');
@@ -30,6 +31,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/questions', questionRouter)
 app.use('/answers', answerRouter)
+app.use('/tags', tagRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

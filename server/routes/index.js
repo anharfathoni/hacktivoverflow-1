@@ -10,7 +10,6 @@ router.get('/', function(req, res, next) {
 router
       .get('/checklogin', controllerUser.checkLogin)
       .post('/login', controllerUser.login)
-      .post('/fblogin', controllerUser.loginFacebook)
       .post('/register', controllerUser.register)
 
 module.exports = router;

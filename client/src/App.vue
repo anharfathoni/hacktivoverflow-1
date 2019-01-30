@@ -13,6 +13,16 @@ export default {
   components: {
     Navbar
   },
+  methods: {
+    checkLogin(){
+      if(localStorage.token && localStorage.userId){
+        this.$store.dispatch('checkLogin')
+      }
+    }
+  },
+  created(){
+    this.checkLogin()
+  }
   
 }
 </script>

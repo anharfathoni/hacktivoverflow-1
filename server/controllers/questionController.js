@@ -3,10 +3,10 @@ const Question = require('../models/Question.js')
 class questionController {
   static create(req, res) {
     console.log('masuk controller create question')
-    let { title, body } = req.body
+    let { title, body, tags } = req.body
     let userId = req.current_token._id
     Question
-      .create({ title, body, userId })
+      .create({ title, body, userId, tags })
       .then(question1 => {
         return question1.populate('userId').execPopulate()
       })
@@ -14,20 +14,79 @@ class questionController {
         res.status(200).json({ question, message: 'success post question' })
       })
       .catch(error => {
-        res.status(400).json({ error, message: error.message })
+        res.status(400).json({ message: error.message })
       })
+  }
+
+  static search(req,res){
+    console.log('masuk search')
+    let query = {}
+    let data = {}
+
+    if (req.query.title) {
+      console.log('ada query title')
+      value = new RegExp(req.query.title, "i")
+      data = {
+        $or: [
+          { title: value },
+          { tags: { $in: [value] } }
+        ]
+      }
+    }
+
+    if (req.query.sort) {
+      console.log('ada query sort')
+      let value = req.query.sort
+      if(value === "newest"){
+        query = {updatedAt: 1}
+      }
+    }
+
+    Question.find(data).sort(query)
+    .then( questions => {
+      res.status(200).json({ questions })
+    })
+    .catch( error => {
+      res.status(500).json({message: error.message})
+    })
   }
 
   static findAll(req, res) {
     console.log('show all question')
-    Question.find({})
-      .sort({updatedAt: -1})
+    let query = {createdAt: -1}
+    let data = {}
+
+    if (req.query.title) {
+      let value = new RegExp(req.query.title, "i")
+      console.log('ada query title', value)
+      data = {
+        $or: [
+          { title: value },
+          { tags: { $in: [ value ] } }
+        ]
+      }
+    }
+
+    if (req.query.sort) {
+      console.log('ada query sort')
+      let value = req.query.sort
+      if(value === "newest"){
+        query = {updatedAt: -1}
+      } else if(value === "vote"){
+        query = {voteUp: -1}
+      }
+    }
+    console.log(data)
+    console.log(query)
+
+    Question.find(data).sort(query)
       .populate('userId')
       .then(questions => {
         res.status(200).json({ questions })
       })
       .catch(error => {
-        res.status(400).json({ error, message: error.message })
+        console.log(error)
+        res.status(400).json({ message: error.message })
       })
   }
 
@@ -47,7 +106,7 @@ class questionController {
         res.status(200).json({ question })
       })
       .catch(error => {
-        res.status(400).json({ error, message: error.message })
+        res.status(400).json({ message: error.message })
       })
   }
 
@@ -61,7 +120,7 @@ class questionController {
         res.status(200).json({ question, message: "success edit question" })
       })
       .catch(error => {
-        res.status(400).json({ error, message: error.message })
+        res.status(400).json({ message: error.message })
       })
   }
 
@@ -73,7 +132,7 @@ class questionController {
         res.status(200).json({ question, message: 'success delete question' })
       })
       .catch(error => {
-        res.status(400).json({ error, message: error.message })
+        res.status(400).json({ message: error.message })
       })
 
   }
@@ -143,38 +202,8 @@ class questionController {
       })
       .catch(error => {
         console.log(error.response)
-        res.status(400).json({ error, message: error.message })
+        res.status(400).json({ message: error.message })
       })
-    // } else {
-    //   Question.find({_id: questionId, voteDown: userId})
-    //   .then( user => {
-    //     console.log("user:",user)
-    //     if(user.length > 0){
-    //       console.log('pull')
-    //       return Question.findByIdAndUpdate(
-    //         {_id: questionId},
-    //         { $pull: { voteUp: userId }}
-    //       )
-
-    //     } else {
-    //       console.log('push')
-    //       return Question.findByIdAndUpdate(
-    //         {_id: questionId},
-    //         { $push: { voteUp: userId }}
-    //       )
-    //     }
-    //   })
-    //   .then( question => {
-    //     console.log('after voteee=====')
-    //     console.log(question)
-    //     res.status(200).json({question, message: 'success vote'})
-    //   })
-    //   .catch( error => {
-    //     console.log(error.response)
-    //     res.status(400).json({error, message: error.message})
-    //   })
-    // }
-
   }
 }
 
