@@ -8,8 +8,8 @@ function isQuestionOwner(req,res,next){
   .populate('userId')
   .then( question => {
     console.log(question)
-    console.log([question.userId.email,req.current_token.email])
-    if(question.userId.email == req.current_token.email){
+    console.log([question.userId.email,req.current_user.email])
+    if(question.userId.email == req.current_user.email){
       next()
     } else {
       console.log('you are not the owner')

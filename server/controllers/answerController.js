@@ -34,7 +34,7 @@ class answerController{
   static add(req,res){
     let questionId = req.params.questionId
     let {content} = req.body
-    let userId = req.current_token._id
+    let userId = req.current_user._id
 
     let newAnswer = {
       content, questionId, userId
@@ -76,7 +76,7 @@ class answerController{
   static vote(req, res) {
     let answerId = req.params.answerId
     let status = req.body.status
-    let userId = req.current_token._id
+    let userId = req.current_user._id
 
     Answer.find({ _id: answerId })
       .then(user => {

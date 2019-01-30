@@ -91,6 +91,29 @@ class userController{
       res.status(400).json({message: error.message})
     })
   }
+
+  static getDataUser(req,res){
+    console.log('masuk gannn')
+    User.findById(req.current_user._id)
+      .then( user => {
+        res.status(200).json({user})
+      })
+      .catch( error => {
+        res.status(400).json({message: error.message})
+      })
+  }
+
+  static addWatchedTags(req,res){
+    let {watchedTags} = req.body
+
+    User.findByIdAndUpdate(req.current_user._id, { $push: {watchedTags}}, {new: true})
+      .then( user => {
+        res.status(200).json({user, message: "success add watched tag"})
+      })
+      .catch( error => {
+        res.status(400).json({message: error.message})
+      })
+  }
 }
 
 module.exports = userController

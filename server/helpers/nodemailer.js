@@ -10,7 +10,7 @@ const transporter = nodemailer.createTransport({
 
 module.exports = function (receiver, content, done) {
     const mailOptions = {
-        from: 'gamecowo12345@gmail.com',
+        from: 'projectq132@gmail.com',
         to: receiver,
         subject: content.header,
         html: content.main

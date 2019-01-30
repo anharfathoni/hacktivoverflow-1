@@ -4,7 +4,7 @@ class questionController {
   static create(req, res) {
     console.log('masuk controller create question')
     let { title, body, tags } = req.body
-    let userId = req.current_token._id
+    let userId = req.current_user._id
     Question
       .create({ title, body, userId, tags })
       .then(question1 => {
@@ -140,7 +140,7 @@ class questionController {
   static vote(req, res) {
     let questionId = req.params.questionId
     let status = req.body.status
-    let userId = req.current_token._id
+    let userId = req.current_user._id
     console.log([status, userId])
 
     // if(status === 'up'){

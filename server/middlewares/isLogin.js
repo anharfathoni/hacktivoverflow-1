@@ -15,7 +15,7 @@ function isLogin(req,res,next){
       .then(user => {
         if(user){
           console.log('user found')
-          req.current_token = user
+          req.current_user = user
           next()
         } else {
           console.log('user not found')

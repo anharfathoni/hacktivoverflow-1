@@ -25,6 +25,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'password must be filled']
   },
+  watchedTags: []
 })
 
 userSchema.pre('save',function(next) {

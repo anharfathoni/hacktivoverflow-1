@@ -7,7 +7,7 @@ function isQuestionOwner(req,res,next){
   Question.findById({_id: questionId})
   .populate('userId')
   .then( question => {
-    if(question.userId.email == req.current_token.email){
+    if(question.userId.email == req.current_user.email){
       console.log('cannot vote yours')
       res.status(400).json({message: 'cannot vote yours'})
     } else {

@@ -7,7 +7,7 @@ function isAnswerOwner(req,res,next){
   Answer.findById({_id: answerId})
   .populate('userId')
   .then( answer => {
-    if(answer.userId.email == req.current_token.email){
+    if(answer.userId.email == req.current_user.email){
       next()
     } else {
       console.log('you are not the owner')
