@@ -45,17 +45,10 @@ export default {
       statusTag: null,
 
       tag: '',
-      // tags: [],
       autocompleteItems: [{
         text: 'javascript',
       }, {
         text: 'nodejs',
-      }, {
-        text: 'Web',
-      }, {
-        text: 'vue-cli',
-      }, {
-        text: 'mongoose',
       }],
     };
   },

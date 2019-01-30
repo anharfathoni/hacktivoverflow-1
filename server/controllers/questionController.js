@@ -74,10 +74,10 @@ class questionController {
         query = {updatedAt: -1}
       } else if(value === "vote"){
         query = {voteUp: -1}
+      } else if(value === "unanswered"){
+        query = {answerId: -1}
       }
     }
-    console.log(data)
-    console.log(query)
 
     Question.find(data).sort(query)
       .populate('userId')

@@ -66,8 +66,16 @@ export default new Vuex.Store({
 //===============================================================================
   actions: {
     search({commit}, data){
+      let url = `questions?`
+
+      if(data.title){
+        url += `title=${data.title}&`
+      }
+      if(data.sort){
+        url += `sort=${data.sort}`
+      }
       api({
-        url: `questions?title=${data.title}&sort=${data.sort}`
+        url: url
       })
         .then( ({data}) => {
           commit('getAllQuestionMutate', data.questions)

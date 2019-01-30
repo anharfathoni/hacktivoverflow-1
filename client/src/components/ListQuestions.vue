@@ -17,17 +17,17 @@
             </div>
             <div class="row">
               <router-link :to="''">
-                <b-card no-body style="width: 6rem;">
+                <b-card no-body style="width: 6rem;" @click.prevent="sort('newest')">
                   <small>Newest</small>
                 </b-card>
               </router-link>
               <router-link :to="''">
-                <b-card no-body style="width: 6rem;">
+                <b-card no-body style="width: 6rem;" @click.prevent="sortingVote">
                   <small>Votes</small>
                 </b-card>
               </router-link>
               <router-link :to="''">
-                <b-card no-body style="width: 6rem;">
+                <b-card no-body style="width: 6rem;" @click.prevent="sortingAnswer">
                   <small>Unanswered</small>
                 </b-card>
               </router-link>
@@ -67,7 +67,12 @@
           <small>{{question.userId.name}}</small>
         </div>
         <div class="row">
-          <small>Asked {{moment(question.createdAt).calendar()}}</small>
+          <small>
+            <small>Asked {{moment(question.createdAt).calendar()}}</small>
+            <br>
+            <small>Updated {{moment(question.updatedAt).calendar()}}</small>
+          </small>
+          
         </div>
       </div>
     </div>
@@ -99,7 +104,17 @@ export default {
     },
     search(title){
       this.$store.dispatch('search', {title})
+    },
+    sort(sort){
+      this.$store.dispatch('search', {sort})
+    },
+    sortingVote(){
+      this.listQuestions.sort(function(a, b){ return (a.voteUp.length-a.voteDown.length) - (b.voteUp.length - b.voteDown.length) })
+    },
+    sortingAnswer(){
+      this.listQuestions.sort(function(a, b){ return (a.answerId.length) - (b.answerId.length) })
     }
+
   },
   computed: mapState(["listQuestions"])
 };

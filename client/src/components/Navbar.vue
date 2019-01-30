@@ -8,14 +8,10 @@
         <!-- </router-link> -->
       </b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
-        <b-navbar-nav>
-          <b-nav-item @click="gohome">Home</b-nav-item>
-        </b-navbar-nav>
-
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-form @submit.prevent="search" class="mr-5" v-if="(this.$route.path !== '/register' && this.$route.path !== '/login')">
-            <b-form-input v-model="title" size="sm" class="mr-sm-2" type="text" placeholder="Search Title or Tag" style="width:400px;"/>
+            <b-form-input v-model="title" size="sm" class="mr-sm-2" type="text" placeholder="Search Title or Tag" style="width:500px;"/>
           </b-nav-form>
 
           <b-navbar-nav class="ml-5 mr-3">
@@ -80,7 +76,7 @@ export default {
 
 <style>
 .marginbottom{
-  margin-bottom: 8%;
+  margin-bottom: 5%;
 }
 </style>
 

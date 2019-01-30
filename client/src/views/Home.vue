@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div class="row" v-if="this.$route.path === '/'">
-      <div class="col-2"><p>Sidebar Left</p></div>
+      <div class="col-2"><SidebarLeft/></div>
       <div class="col-7"><ListQuestions></ListQuestions></div>
-      <div class="col-3"><p>Sidebar Right</p></div>
+      <div class="col-3"><SidebarRight/></div>
     </div>
     <router-view v-if="this.$route.path !== '/'"></router-view>
   </div>
@@ -13,12 +13,14 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import ListQuestions from '@/components/ListQuestions.vue'
+import SidebarRight from '@/components/SidebarRight.vue'
+import SidebarLeft from '@/components/SidebarLeft.vue'
 import { mapState } from 'vuex';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld, ListQuestions
+    HelloWorld, ListQuestions, SidebarRight, SidebarLeft
   },
   methods: {
     checkStatusLogin(){
